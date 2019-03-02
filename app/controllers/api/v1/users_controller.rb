@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < BaseController
-      before_action :authenticate_request, only: :update
+      before_action :authenticate_request, except: :create
 
       def create
         command = Commands::CreateUser.new(user_params)
@@ -15,21 +15,21 @@ module Api
 
       def current
         identifier = nil
-        with_authenticated_lock do |user|
-          identifier = user.identifier
+        @current_user.with_lock do
+          identifier = @current_user.identifier
         end
 
-        successful_execution(identifier: identifier) if identifier
+        successful_execution(identifier: identifier)
       end
 
       def next
         identifier = nil
-        with_authenticated_lock do |user|
-          user.increment_identifier
-          identifier = user.identifier
+        @current_user.with_lock do
+          @current_user.increment_identifier
+          identifier = @current_user.identifier
         end
 
-        successful_execution(identifier: identifier) if identifier
+        successful_execution(identifier: identifier)
       end
 
       def update

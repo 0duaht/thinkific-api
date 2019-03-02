@@ -10,7 +10,7 @@ module Commands
     def execute
       return unless valid?
 
-      User.with_advisory_lock(user.api_token) do
+      user.with_lock do
         user.update(identifier: identifier)
         @result = user.identifier
       end
