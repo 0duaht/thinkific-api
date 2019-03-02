@@ -45,7 +45,7 @@ module Commands
 
     def identifier_hash
       {
-        identifier: identifier.to_i
+        identifier: identifier
       }
     end
   end

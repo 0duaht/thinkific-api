@@ -1,15 +1,18 @@
 module Commands
   class SetIdentifier
-    attr_accessor :user, :identifier
+    attr_accessor :user, :identifier, :result
 
-    def initialize(user, identifier)
-      @user = user
-      @identifier = identifier
-    end
+    include ActiveModel::Model
+    include ActiveModel::Validations::Callbacks
 
-    def call
-      User.with_advisory_lock(user.id) do
+    validates_numericality_of :identifier, if: :identifier
+
+    def execute
+      return unless valid?
+
+      User.with_advisory_lock(user.api_token) do
         user.update(identifier: identifier)
+        @result = user.identifier
       end
     end
   end
