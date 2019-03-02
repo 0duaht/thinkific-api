@@ -7,7 +7,7 @@ module Api
         command = Commands::CreateUser.new(user_params)
 
         if command.execute
-          successful_user_creation(command.result, 201)
+          successful_execution(command.result, 201)
         else
           failed_execution(command.errors)
         end
