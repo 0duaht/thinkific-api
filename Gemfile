@@ -28,4 +28,9 @@ group :development do
   gem 'web-console', '>= 3.3.0'
 end
 
+group :test do
+  gem 'faker'
+  gem 'factory_bot_rails'
+end
+
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
