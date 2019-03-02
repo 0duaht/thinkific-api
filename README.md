@@ -134,6 +134,6 @@ Start the Rails server, and make a request to any of the endpoints documented.
 
 ## Further Actions
 
-Initialized the project with the intention of also adding a React front-end to consume the API, as well as tests.
+Initialized the project with the intention of also adding a React front-end to consume the API.
 
 If I find time sometime this weekend to add that in, I'd get to it as well. However, this is enough of an MVP to fulfill the project's requirements.
