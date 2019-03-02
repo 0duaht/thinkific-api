@@ -7,7 +7,7 @@ module Api
         command = Commands::CreateUser.new(user_params)
 
         if command.execute
-          successful_user_creation(command.result)
+          successful_user_creation(command.result, 201)
         else
           failed_execution(command.errors)
         end
@@ -19,7 +19,7 @@ module Api
           identifier = user.identifier
         end
 
-        render json: { identifier: identifier }, status: 200 if identifier
+        successful_execution(identifier: identifier) if identifier
       end
 
       def next
@@ -29,7 +29,7 @@ module Api
           identifier = user.identifier
         end
 
-        render json: { identifier: identifier }, status: 200 if identifier
+        successful_execution(identifier: identifier) if identifier
       end
 
       def update
@@ -38,7 +38,7 @@ module Api
         )
 
         if command.execute
-          render json: { identifier: command.result }, status: 200
+          successful_execution(identifier: command.result)
         else
           failed_execution(command.errors)
         end
@@ -46,11 +46,13 @@ module Api
 
       private
 
-      def successful_user_creation(user)
+      def successful_execution(response_hash, status = 200)
         render json: {
-          identifier: user.identifier,
-          api_token: user.api_token
-        }, status: 201
+          data: {
+            type: 'users',
+            attributes: response_hash
+          }
+        }, status: status
       end
 
       def failed_execution(errors)
@@ -60,11 +62,13 @@ module Api
       end
 
       def user_params
-        params.require(:user).permit(:email, :password, :identifier)
+        params.require(:data).permit(
+          attributes: %i[email password identifier]
+        )
       end
 
       def user_update_params
-        params.require(:user).permit(:identifier)
+        params.require(:data).permit(attributes: %i[identifier])
       end
     end
   end

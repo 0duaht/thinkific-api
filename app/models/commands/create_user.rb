@@ -15,7 +15,13 @@ module Commands
     def execute
       return unless valid?
 
-      @result = User.create(user_attrs)
+      user = User.create(user_attrs)
+      return nil unless user.persisted?
+
+      @result = {
+        identifier: user.identifier,
+        api_token: user.api_token
+      }
     end
 
     private
