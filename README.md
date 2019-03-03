@@ -23,9 +23,9 @@ To authenticate, pass the API token obtained while creating the user as a bearer
 
 Identifier actions are thread-safe, so you can be assured that multiple requests made to increment/set the identifier are bulletproof from race conditions.
 
-All endpoints require requests that confirm to the JSON api specification described here: https://jsonapi.org.
+All endpoints require requests that confirm to the JSON api specification described here: https://jsonapi.org. Thus, you have to pass along the Content-Type header for every request as well:
 
-TLDR: Pass `application/vnd.api+json` as the value for the `Content-Type` header, and match sample JSON body shared below.
+        Content-Type: application/vnd.api+json
 
 ## API Actions
 ### Creating a User
@@ -33,6 +33,10 @@ TLDR: Pass `application/vnd.api+json` as the value for the `Content-Type` header
 The API endpoint for creating users requires two attributes, and an optional attribute.
 
 Accessible as a `POST` request to https://thinkific-demo.herokuapp.com/api/v1/users
+
+with header:
+
+        Content-Type: application/vnd.api+json
 
 The required attributes are the preferred email and password, while the optional attribute is the initial identifier.
 
@@ -72,6 +76,7 @@ Available as a `GET` request to https://thinkific-demo.herokuapp.com/api/v1/user
 with headers:
 
         Authorization: Bearer 28slkjdfa2fajsdf9023kdk
+        Content-Type: application/vnd.api+json
 
 A sample response is:
 
@@ -95,6 +100,7 @@ Available as a `GET` request to https://thinkific-demo.herokuapp.com/api/v1/user
 with headers:
     
         Authorization: Bearer 28slkjdfa2fajsdf9023kdk
+        Content-Type: application/vnd.api+json
 
 A sample response is:
 
@@ -118,6 +124,7 @@ Available as a `PUT` request to https://thinkific-demo.herokuapp.com/api/v1/user
 with headers:
     
         Authorization: Bearer 28slkjdfa2fajsdf9023kdk
+        Content-Type: application/vnd.api+json
 
 The only required attribute is the new identifier
 
