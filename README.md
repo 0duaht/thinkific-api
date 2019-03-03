@@ -3,14 +3,23 @@
 Rails API submission for obtaining sequential identifiers. Heroku demo available at https://thinkific-demo.herokuapp.com
 
 Identifiers are integers, and each request returns the next integer in the sequence.
+
 Identifiers start from *0* by default, as common with most programming languages.
+
 However, in the real world, where identifiers are sometimes used as primary keys for resources, you might want to start from 1.
 
-Accessing identifier actions requires creating a user account, thus the first request should ideally be the one that creates the user account, and as mentioned, accounts are created with a default identifier of zero. However, to start from 1 or any other value instead, you can pass in the additional value to the endpoint while creating the user resource
+Accessing identifier actions requires creating a user account, thus the first request should ideally be the one that creates the user account, and as mentioned, accounts are created with a default identifier of zero.
 
+However, to start from 1 or any other value instead, you can pass in the additional value to the endpoint while creating the user resource
+
+## Identifier Endpoints
 Endpoints are also available to either set the identifier's value, get the current identifier, or increment the identifier by one.
 
-Endpoints that interact with the value of the identifier (setting, reading or incrementing) require authentication. To authenticate, pass the API token obtained while creating the user as a URL parameter to the endpoint, with the param `api_token`
+Endpoints that interact with the value of the identifier (setting, reading or incrementing) require authentication.
+
+To authenticate, pass the API token obtained while creating the user as a bearer token in the `Authorization` header. For example:
+
+            Authorization: Bearer <sample-token>
 
 Identifier actions are thread-safe, so you can be assured that multiple requests made to increment/set the identifier are bulletproof from race conditions.
 
@@ -58,7 +67,11 @@ A sample response is:
 
 Requires token authentication. 
 
-Available as a `GET` request to https://thinkific-demo.herokuapp.com/api/v1/users/current?api_token=28slkjdfa2fajsdf9023kdk
+Available as a `GET` request to https://thinkific-demo.herokuapp.com/api/v1/users/current
+
+with headers:
+
+        Authorization: Bearer 28slkjdfa2fajsdf9023kdk
 
 A sample response is:
 
@@ -77,7 +90,11 @@ A sample response is:
 
 Requires token authentication. 
 
-Available as a `GET` request to https://thinkific-demo.herokuapp.com/api/v1/users/next?api_token=28slkjdfa2fajsdf9023kdk
+Available as a `GET` request to https://thinkific-demo.herokuapp.com/api/v1/users/next
+
+with headers:
+    
+        Authorization: Bearer 28slkjdfa2fajsdf9023kdk
 
 A sample response is:
 
@@ -96,7 +113,11 @@ A sample response is:
 
 Requires token authentication. 
 
-Available as a `PUT` request to https://thinkific-demo.herokuapp.com/api/v1/users?api_token=28slkjdfa2fajsdf9023kdk
+Available as a `PUT` request to https://thinkific-demo.herokuapp.com/api/v1/users
+
+with headers:
+    
+        Authorization: Bearer 28slkjdfa2fajsdf9023kdk
 
 The only required attribute is the new identifier
 

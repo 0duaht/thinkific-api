@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'Interacting with Identifiers' do
+    before { request.content_type = 'application/vnd.api+json' }
     context 'unauthenticated requests' do
       it 'requires authentication for current' do
         get :next
@@ -9,7 +10,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'requires authentication for next' do
-        get :current, params: { api_token: Faker::Lorem.word }
+        request.headers.merge('Authorization' => "Bearer #{Faker::Lorem.word}")
+        get :current
         expect(response).to have_http_status(:unauthorized)
       end
 
@@ -24,7 +26,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         identifier = Faker::Number.number.to_i
         user = create(:user, identifier: identifier)
 
-        get :current, params: { api_token: user.api_token }
+        request.headers.merge('Authorization' => "Bearer #{user.api_token}")
+        get :current
 
         expect(response).to have_http_status(:successful)
         json_res = JSON.parse(response.body)
@@ -35,7 +38,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         identifier = Faker::Number.number.to_i
         user = create(:user, identifier: identifier)
 
-        get :next, params: { api_token: user.api_token }
+        request.headers.merge('Authorization' => "Bearer #{user.api_token}")
+        get :next
 
         expect(response).to have_http_status(:successful)
         json_res = JSON.parse(response.body)
@@ -49,10 +53,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         identifier = Faker::Number.number.to_i
         user = create(:user)
 
-        put :update, params: {
-          data: { attributes: { identifier: identifier } },
-          api_token: user.api_token
-        }
+        request.headers.merge('Authorization' => "Bearer #{user.api_token}")
+        put :update, body: {
+          data: { attributes: { identifier: identifier } }
+        }.to_json
 
         expect(response).to have_http_status(:successful)
         json_res = JSON.parse(response.body)
